@@ -1,14 +1,19 @@
 import { getPosts } from "@/lib/getPosts";
+import Link from "next/link";
 
 const Page = async () => {
   const posts = await getPosts();
 
   return (
-    <div>
+    <div className="flex gap-4">
       {posts.map((post, idx) => (
         <div key={idx}>
-          <h2>{post.title}</h2>
-          <p>{post.description}</p>
+          <Link
+            href={`/posts/${post.slug}`}
+            className="text-gray-600 hover:text-gray-800"
+          >
+            {post.title}
+          </Link>
         </div>
       ))}
     </div>
