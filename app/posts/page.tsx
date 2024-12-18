@@ -9,7 +9,7 @@ const formatDate = (dateStr: string) => {
 
   return date.toLocaleDateString("en-US", {
     year: "numeric",
-    month: "long",
+    month: "short",
     day: "numeric",
     timeZone: "UTC", // Ensure consistent date display regardless of local timezone
   });
@@ -26,7 +26,7 @@ const Page = async () => {
           href={`/posts/${post.slug}`}
           className="flex items-center text-gray-600 hover:text-gray-800 no-underline"
         >
-          <span className="text-sm w-36 flex-shrink-0 font-normal text-gray-500">
+          <span className="w-28 flex-shrink-0 font-normal text-gray-400">
             {formatDate(post.date)}
           </span>
           <span>{post.title}</span>
