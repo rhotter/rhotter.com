@@ -64,7 +64,7 @@ export const NavBar = () => {
 };
 
 export const Socials = () => (
-  <div className="flex gap-2">
+  <div className="flex gap-2 mt-8">
     <SocialIcon href="https://twitter.com/raffi_hotter" icon={faTwitter} />
     <SocialIcon href="mailto:raphael.hotter@gmail.com" icon={faEnvelope} />
     <SocialIcon href="https://github.com/rhotter" icon={faGithub} />
