@@ -6,6 +6,41 @@ export interface Post {
   title: string;
   description: string;
   slug: string;
+  date: string;
+}
+
+interface PostMetadata {
+  title: string;
+  description: string;
+  date: string;
+}
+
+function validateMetadata(metadata: any, slug: string): PostMetadata {
+  if (!metadata.title) {
+    throw new Error(`Missing title in post: ${slug}`);
+  }
+  if (!metadata.description) {
+    throw new Error(`Missing description in post: ${slug}`);
+  }
+  if (!metadata.date) {
+    throw new Error(
+      `Missing date in post: ${slug}. Please add a date field to your MDX frontmatter (e.g., date: "2024-01-20")`
+    );
+  }
+
+  // Validate date format
+  const date = new Date(metadata.date);
+  if (isNaN(date.getTime())) {
+    throw new Error(
+      `Invalid date format in post: ${slug}. Please use ISO format (e.g., "2024-01-20")`
+    );
+  }
+
+  return {
+    title: metadata.title,
+    description: metadata.description,
+    date: metadata.date,
+  };
 }
 
 export const getPosts = cache(async (): Promise<Post[]> => {
@@ -24,18 +59,26 @@ export const getPosts = cache(async (): Promise<Post[]> => {
   const dirs = (await Promise.all(checkDirPromises)).filter(
     (dir): dir is string => dir !== null
   );
-  console.log({ dirs });
 
-  return Promise.all(
+  const postsData = await Promise.all(
     dirs.map(async (dir): Promise<Post> => {
       // import the metadata and content from the MDX file
       const { metadata } = await import(`../app/posts/${dir}/page.mdx`);
 
+      // Validate metadata
+      const validatedMetadata = validateMetadata(metadata, dir);
+
       return {
-        title: metadata.title,
-        description: metadata.description,
+        title: validatedMetadata.title,
+        description: validatedMetadata.description,
         slug: dir,
+        date: validatedMetadata.date,
       };
     })
+  );
+
+  // Sort posts by date, most recent first
+  return postsData.sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
 });

@@ -25,7 +25,7 @@ const NavLink = ({
   return (
     <Link
       href={href}
-      className={`${isActive ? "text-gray-500" : "text-gray-900 underline"}`}
+      className={`${isActive ? "text-gray-900" : "text-gray-500"}`}
     >
       {children}
     </Link>
@@ -39,7 +39,7 @@ const SocialIcon = ({
   icon: FontAwesomeIconProps["icon"];
   href: string;
 }) => (
-  <Link href={href}>
+  <Link href={href} target="_blank">
     <FontAwesomeIcon
       icon={icon}
       className="w-4 h-4 text-gray-300 hover:text-gray-400"
@@ -52,18 +52,6 @@ export const NavBar = () => {
     <div className="mb-8 flex justify-between items-center">
       <div className="text-2xl font-bold">
         <Link href="/">Raffi Hotter</Link>
-        <div className="flex gap-2">
-          <SocialIcon
-            href="https://twitter.com/yourTwitterHandle"
-            icon={faTwitter}
-          />
-          <SocialIcon href="mailto:yourEmail@example.com" icon={faEnvelope} />
-          <SocialIcon href="mailto:yourEmail@example.com" icon={faGithub} />
-          <SocialIcon
-            href="mailto:yourEmail@example.com"
-            icon={faChevronCircleUp}
-          />
-        </div>
       </div>
       <nav>
         <div className="flex gap-4">
@@ -74,3 +62,15 @@ export const NavBar = () => {
     </div>
   );
 };
+
+export const Socials = () => (
+  <div className="flex gap-2">
+    <SocialIcon href="https://twitter.com/raffi_hotter" icon={faTwitter} />
+    <SocialIcon href="mailto:raphael.hotter@gmail.com" icon={faEnvelope} />
+    <SocialIcon href="https://github.com/rhotter" icon={faGithub} />
+    <SocialIcon
+      href="https://curius.app/raffi-hotter"
+      icon={faChevronCircleUp}
+    />
+  </div>
+);
