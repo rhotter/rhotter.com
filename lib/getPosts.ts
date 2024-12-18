@@ -4,23 +4,18 @@ import path from "path";
 
 export interface Post {
   title: string;
-  description: string;
   slug: string;
   date: string;
 }
 
 interface PostMetadata {
   title: string;
-  description: string;
   date: string;
 }
 
 function validateMetadata(metadata: any, slug: string): PostMetadata {
   if (!metadata.title) {
     throw new Error(`Missing title in post: ${slug}`);
-  }
-  if (!metadata.description) {
-    throw new Error(`Missing description in post: ${slug}`);
   }
   if (!metadata.date) {
     throw new Error(
@@ -38,7 +33,6 @@ function validateMetadata(metadata: any, slug: string): PostMetadata {
 
   return {
     title: metadata.title,
-    description: metadata.description,
     date: metadata.date,
   };
 }
@@ -70,7 +64,6 @@ export const getPosts = cache(async (): Promise<Post[]> => {
 
       return {
         title: validatedMetadata.title,
-        description: validatedMetadata.description,
         slug: dir,
         date: validatedMetadata.date,
       };

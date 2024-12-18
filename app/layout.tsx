@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
-// import { Inter } from "next/font/google";
 import { GeistSans } from "geist/font/sans";
+import "katex/dist/katex.min.css";
 
 import "./globals.css";
 import { NavBar } from "./NavBar";
-
-// const inter = GeistSans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Raffi Hotter",
@@ -19,9 +17,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={GeistSans.className}>
-        <div className="container mx-auto px-6 sm:pt-16 pt-6 text-gray-900 max-w-2xl">
+        <div className="container mx-auto px-6 sm:pt-16 pt-6 text-gray-900 max-w-2xl pb-16">
           <NavBar />
-          <div className="prose max-w-none text-gray-600">{children}</div>
+          <div className="prose prose-sm">{children}</div>
         </div>
       </body>
     </html>

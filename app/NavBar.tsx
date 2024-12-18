@@ -50,7 +50,7 @@ const SocialIcon = ({
 export const NavBar = () => {
   return (
     <div className="mb-8 flex justify-between items-center">
-      <div className="text-2xl font-bold">
+      <div className="font-bold text-lg">
         <Link href="/">Raffi Hotter</Link>
       </div>
       <nav>
