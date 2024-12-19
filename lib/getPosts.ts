@@ -11,6 +11,7 @@ export interface Post {
 export interface PostMetadata {
   title: string;
   date: string;
+  hidden?: boolean;
 }
 
 function validateMetadata(metadata: any, slug: string): PostMetadata {
@@ -34,6 +35,7 @@ function validateMetadata(metadata: any, slug: string): PostMetadata {
   return {
     title: metadata.title,
     date: metadata.date,
+    hidden: metadata.hidden,
   };
 }
 
@@ -54,21 +56,27 @@ export const getPosts = cache(async (): Promise<Post[]> => {
     (dir): dir is string => dir !== null
   );
 
-  const postsData = await Promise.all(
-    dirs.map(async (dir): Promise<Post> => {
-      // import the metadata and content from the MDX file
-      const { metadata } = await import(`../app/posts/${dir}/page.mdx`);
+  const postsData = (
+    await Promise.all(
+      dirs.map(async (dir) => {
+        // import the metadata and content from the MDX file
+        const { metadata } = await import(`../app/posts/${dir}/page.mdx`);
 
-      // Validate metadata
-      const validatedMetadata = validateMetadata(metadata, dir);
+        // Validate metadata
+        const validatedMetadata = validateMetadata(metadata, dir);
 
-      return {
-        title: validatedMetadata.title,
-        slug: dir,
-        date: validatedMetadata.date,
-      };
-    })
-  );
+        if (validatedMetadata.hidden) {
+          return null;
+        }
+
+        return {
+          title: validatedMetadata.title,
+          slug: dir,
+          date: validatedMetadata.date,
+        };
+      })
+    )
+  ).filter((post): post is Post => post !== null);
 
   // Sort posts by date, most recent first
   return postsData.sort(

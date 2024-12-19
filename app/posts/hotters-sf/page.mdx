@@ -1,0 +1,67 @@
+export const metadata = {
+  title: "Hotters visit SF",
+  hidden: true,
+  date: "2024-12-20",
+};
+
+import Image from "next/image";
+
+import hottersImg from "@/app/public/hotters-sf/hotters.jpg";
+
+import stanfordImg from "@/app/public/hotters-sf/stanford.webp";
+import landsEndImg from "@/app/public/hotters-sf/lands_end.jpg";
+import muirWoodsImg from "@/app/public/hotters-sf/muir_woods.jpg";
+import palaceOfFineArtsImg from "@/app/public/hotters-sf/palace_of_fine_arts.jpg";
+import lombardImg from "@/app/public/hotters-sf/lombard.jpg";
+import doloresImg from "@/app/public/hotters-sf/dolores.jpg";
+
+import { ImageGrid } from "./ImageGrid";
+
+# Hotters visit SF
+
+<div className="w-1/2 mx-auto">
+  <Image src={hottersImg} alt="Hotters visit SF" />
+</div>
+
+### Activities
+- Walk by the water
+- Small hike at Lands End by the water, beautiful views
+- Hike Muir Woods: beautiful redwood trees, some of the tallest trees in the world, Daddy-friendly hike
+- Visit Palace of Fine Arts
+- Visit Golden Gate Park
+- Lombard Street: the "crookedest street in the world"
+- Mission Dolores park
+- Fort Mason park
+- Bike ride by the water
+- Visit Stanford and Palo Alto
+- Take a Waymo
+- Visit Twin peaks: beautiful view of the city
+- Take a ferry to Alcatraz
+- Visit UC Berkeley, go on a hike at the nearby Redwood Regional Park
+
+
+<ImageGrid 
+  images={[
+    { src: landsEndImg, alt: "Lands End" },
+    { src: muirWoodsImg, alt: "Muir Woods" },
+    { src: palaceOfFineArtsImg, alt: "Palace of Fine Arts" },
+    { src: lombardImg, alt: "Lombard Street" },
+    { src: stanfordImg, alt: "Stanford" },
+    { src: doloresImg, alt: "Mission Dolores Park" }
+  ]}
+/>
+
+
+
+### Food
+- [Tartine](https://maps.app.goo.gl/kSmVBcFXWmGv7uC39): best bakery in SF, amazing sourdough
+- [Gio Gelati](https://maps.app.goo.gl/wBmThhv5iXHnmsbt8): best gelato
+- [Doppio Zero](https://maps.app.goo.gl/wBmThhv5iXHnmsbt8): Neapolitan-style pizza and great pasta
+- [A Mano](https://maps.app.goo.gl/nXJeckbcD4KXhTH88): great pasta
+- [Wildseed](https://maps.app.goo.gl/cYShutpVF6VSrgmD7): great vegan food that you can't tell is vegan
+- [Song Tea](https://maps.app.goo.gl/ypCKiN3VtHiM6VS57): amazing tea
+- [Sweet Mango Dessert Cafe](https://maps.app.goo.gl/eEbNLht8d5wT413Z8): for mochi
+- [Tender Greens](https://maps.app.goo.gl/oY5TvXJxRLFoaGcf7): lunch spot
+- [Cafe Venetia](https://maps.app.goo.gl/dVy2XWvJq612k2cT9): great hot chocolate in Stanford
+- [Nara](https://maps.app.goo.gl/H5NwzHNjv3FyweJn9): sushi place Maman and I went to
+- [Greens](https://maps.app.goo.gl/ysPr5ptBsAQWnZnRA): great vegetarian food
