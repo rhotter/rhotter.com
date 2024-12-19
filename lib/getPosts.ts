@@ -8,7 +8,7 @@ export interface Post {
   date: string;
 }
 
-interface PostMetadata {
+export interface PostMetadata {
   title: string;
   date: string;
 }
