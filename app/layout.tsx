@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
+import { Analytics } from "@vercel/analytics/react";
 import "katex/dist/katex.min.css";
 
 import "./globals.css";
@@ -8,7 +9,6 @@ import { NavBar } from "./NavBar";
 export const metadata: Metadata = {
   title: "Raffi Hotter",
 };
-
 export default function RootLayout({
   children,
 }: {
@@ -21,6 +21,7 @@ export default function RootLayout({
           <NavBar />
           <div className="prose prose-sm">{children}</div>
         </div>
+        <Analytics />
       </body>
     </html>
   );
