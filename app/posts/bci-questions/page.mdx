@@ -1,0 +1,130 @@
+export const metadata = {
+  title: "Questions related to BCIs",
+  date: "2024-12-18",
+};
+
+import { PostHeader } from "@/app/components/PostHeader";
+
+<PostHeader title={metadata.title} date={metadata.date} />
+
+I wrote these questions in 2022, and I spent much of the next year trying to answer them. If you're curious about particular questions and want to know my answer, feel free to [email me](mailto:raphael.hotter@gmail.com).
+
+1. What is a good 1st order electrical/sound model of the brain?
+
+   - [Electric Fields of the Brain](https://www.amazon.com/Electric-Fields-Brain-Neurophysics-EEG/dp/019505038X) proposes a 4 concentric sphere model, with fixed dielectric constant and conductivity for each layer.
+
+2. How important is the diploe layer in scattering of ultrasound? What is a good model for the diploe layer?
+
+3. What is the difference between optics and sound in terms of wave propagation in the brain? Why is ultrasound attenuation lower compared to electromagnetic waves for a fixed frequency? Why are ultrasound power limits higher?
+
+4. Why is the signal from EEG no good?
+
+5. Why can magnetic fields penetrate the brain? 
+
+    - Possibly because the brain (and most materials) have negligible magnetic susceptibility.
+
+6. What level of precision do humans have in their control of neurons? Can humans control a single neuron? To what extent can you control arbitrary subsets of neurons?
+
+7. What happens if you heat up or cool down the brain?
+
+   - One effect — though not sure how significant — is you’d change the probabilities of ion channels opening/closing.
+
+   - Apparently, you can’t heat the brain by more than 2º C (how do we know this?)
+
+8. Why do axons not look like dendrites?
+
+9. What is an electrode made of? Can you make them arbitrarily small?
+
+10. What are the sources of noise in neural recordings?
+
+    - Johnson noise is a lower bound on electrical noise. Ion channels open/close stochastically according to a Boltzmann distribution.
+
+11. What is Johnson noise?
+
+12. Why is wireless BCI hard? Why do transmitters require so much power?
+
+13. What is electromagnetic radiation?
+
+14. Why does voltage decay exponentially near a neuron? Is this related to Debye shielding?
+
+15. How does scattering work?
+
+16. How do all the different types of microscopy work? Light beads, light sheet microscopy, confocal, 2-photon, etc. 
+
+17. How well can we simulate a neuron if we know all its inputs? What would we need to measure to perfectly simulate a neuron? (up to noise in ion channels / other sources of “true” randomness)
+
+18. What are all the markers of neural activity?
+
+    - Some: voltage change, blood flow change, change in concentration of ions, slight (\~10 nm) movements.
+
+    -  Another marker is gene expression changes. Immediate early genes (IEGs) get activated when neurons fire to help with things like memory formation.
+
+19. Why are local field potentials a low pass filter?
+
+20. What is CMOS?
+
+21. How does nano-lithography work?
+
+22. Why are we measuring calcium in two-photon microscopy? Why not say potassium or sodium?
+
+    - Possibly simply because we have indicators for it
+
+    - Also, the calcium increase during spiking is much higher than for potassium and sodium
+
+23. Why are calcium indicators brighter than voltage indicators?
+
+    - There is more volume for calcium indicators in the cell because they live in the cytoplasm, whereas voltage indicators live on the membrane.
+
+       - Can you supplement the voltage indicators with amplifiers that live in the cytoplasm?
+
+24. What are the right inductive biases for neural data? If the inductive biases for neural data are very different from text/image data, then can we expect AI progress to translate to neural data?
+
+    - One inductive bias is viewing populations of neurons as a dynamical system. Translation invariance in the visual cortex is another.
+
+25. Can you have cooling systems for electrodes? (might it reduce Johnson noise? Not to say Johnson noise is the main limitation of electrodes now)
+
+26. Why is the low-pass filter temporal response a problem (e.g. hemodynamic response)? Isn’t it invertible?
+
+    - Maybe with noise it’s harder. For example, if you reduce high frequencies by 100x and add a tiny bit of white noise, the high frequencies become just noise.
+
+27. Are there any attempts to get way larger neural datasets? Maybe the datasets don’t need to be from explicit tasks. For example, you can get a monkey to explore its natural environment and collect both neural and camera data.
+
+28. Can you build datasets of human neural activity that maintain the privacy of the subjects?
+
+29. How does guidestar-based wavefront shaping work?
+
+30. Are spikes all you need?
+
+31. Why do so many neurotech people seem to come from electrical engineering backgrounds?
+
+32. Why is so much BCI research focused on the motor cortex?
+
+    - Possibly because there is fast objective supervision (e.g. I can measure joint movement)
+
+33. People say that power consumption is the bottleneck for electrodes. But it’s really heating that matters, not power consumption, no?
+
+    - Maybe we assume that some significant fraction of power consumption goes to heating.
+
+34. Do we have good models to go from neural activity to blood flow?
+
+35. Is there a limit to the number of electrodes you can put in the brain?
+
+    - Heating — electrodes themselves shouldn’t produce any Joule heating since there is no current (0 = ∆V = I R between the contact point and the measurement point). But amplifiers, analog to digital converters, and RF transmitters produce heat (why?)
+
+36. How dangerous is gene therapy? What are ways of making proteins emit light?
+
+37. What is impedance matching?
+
+38. What is a transistor?
+
+39. What is an LED?
+
+40. What is stress and strain?
+
+41. What is a MOSFET?
+
+42. What is CMOS?
+
+43. What are triplets?
+
+44. What sets the resolution limit in MRI?
