@@ -59,8 +59,13 @@ export const getPosts = cache(async (): Promise<Post[]> => {
   const postsData = (
     await Promise.all(
       dirs.map(async (dir) => {
-        // import the metadata and content from the MDX file
-        const { metadata } = await import(`../app/posts/${dir}/page.mdx`);
+        // Try MDX first, fall back to TSX
+        let metadata;
+        try {
+          ({ metadata } = await import(`../app/posts/${dir}/page.mdx`));
+        } catch {
+          ({ metadata } = await import(`../app/posts/${dir}/page.tsx`));
+        }
 
         // Validate metadata
         const validatedMetadata = validateMetadata(metadata, dir);
