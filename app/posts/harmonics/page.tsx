@@ -1,6 +1,7 @@
 import "katex/dist/katex.min.css";
 import { InlineMath } from "react-katex";
 import { SphericalHarmonicsVisualization } from "./SphericalHarmonicsVisualization";
+import Link from "next/link";
 
 export const metadata = {
   title: "Spherical Harmonics",
@@ -14,6 +15,14 @@ export default function Page() {
         Spherical Harmonics <InlineMath math="Y_{\ell,m}" />
       </h2>
       <SphericalHarmonicsVisualization />
+      <Link
+        href="https://github.com/rhotter/rhotter2/blob/main/app/posts/harmonics/SphericalHarmonicsVisualization.tsx"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-4 text-sm text-gray-600 hover:text-gray-900 underline"
+      >
+        View source code
+      </Link>
     </div>
   );
 }
