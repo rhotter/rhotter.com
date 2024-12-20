@@ -111,13 +111,13 @@ export const SphericalHarmonicsVisualization = () => {
     const containerWidth = containerRef.current.clientWidth;
     const containerHeight = Math.min(containerWidth, window.innerHeight * 0.8);
     const camera = new THREE.PerspectiveCamera(
-      75,
+      60,
       containerWidth / containerHeight,
       0.1,
       1000
     );
     cameraRef.current = camera;
-    camera.position.z = 2;
+    camera.position.z = 1.7;
 
     // Setup renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -218,8 +218,8 @@ export const SphericalHarmonicsVisualization = () => {
     // Disable zooming and panning
     controls.enableZoom = false;
     controls.enablePan = false;
-    controls.minDistance = 2;
-    controls.maxDistance = 2;
+    controls.minDistance = 1.7;
+    controls.maxDistance = 1.7;
 
     // Animation loop
     const animate = () => {
