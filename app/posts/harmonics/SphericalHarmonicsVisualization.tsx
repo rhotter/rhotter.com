@@ -7,10 +7,10 @@ import "katex/dist/katex.min.css";
 import { InlineMath } from "react-katex";
 
 export const SphericalHarmonicsVisualization = () => {
-  const [l, setL] = useState(3);
-  const [m, setM] = useState(0);
-  const [draftL, setDraftL] = useState(3);
-  const [draftM, setDraftM] = useState(0);
+  const [l, setL] = useState(4);
+  const [m, setM] = useState(2);
+  const [draftL, setDraftL] = useState(4);
+  const [draftM, setDraftM] = useState(2);
   const updateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
@@ -90,15 +90,13 @@ export const SphericalHarmonicsVisualization = () => {
     return n * factorial(n - 1);
   };
 
-  // Convert function value to color using the plasma colormap
+  // Convert function value to color using a modern, vibrant color scheme
   const valueToColor = (value: number) => {
-    // Normalize value to [0, 1] range
-    const normalized = (Math.max(-1, Math.min(1, value)) + 1) / 2;
-    return new THREE.Color().setHSL(
-      0.8 - normalized * 0.7, // Hue: purple to yellow
-      0.8, // Saturation
-      0.3 + normalized * 0.4 // Lightness
-    );
+    if (value >= 0) {
+      return new THREE.Color(0x5b84b1); // Soft slate blue
+    } else {
+      return new THREE.Color(0xfc766a); // Soft coral
+    }
   };
 
   useEffect(() => {
@@ -107,7 +105,7 @@ export const SphericalHarmonicsVisualization = () => {
     // Setup scene
     const scene = new THREE.Scene();
     sceneRef.current = scene;
-    scene.background = new THREE.Color(0xffffff);
+    scene.background = new THREE.Color(0xffffff); // White background
 
     // Setup camera
     const containerWidth = containerRef.current.clientWidth;
@@ -130,19 +128,21 @@ export const SphericalHarmonicsVisualization = () => {
     const updateSphere = () => {
       // Create sphere geometry
       const geometry = new THREE.SphereGeometry(1, 512, 512);
-      const material = new THREE.MeshPhongMaterial({
+      const material = new THREE.MeshStandardMaterial({
         vertexColors: true,
-        shininess: 20,
-        emissive: new THREE.Color(0x222222),
+        roughness: 0.5,
+        metalness: 0.1,
       });
 
-      // Apply spherical harmonics colors
+      // Apply spherical harmonics colors and deform geometry
       const colors: THREE.Color[] = [];
       const positions = geometry.attributes.position.array;
+      const originalPositions = positions.slice(); // Store original positions
+
       for (let i = 0; i < positions.length; i += 3) {
-        const x = positions[i];
-        const y = positions[i + 1];
-        const z = positions[i + 2];
+        const x = originalPositions[i];
+        const y = originalPositions[i + 1];
+        const z = originalPositions[i + 2];
 
         // Convert to spherical coordinates
         const r = Math.sqrt(x * x + y * y + z * z);
@@ -151,9 +151,17 @@ export const SphericalHarmonicsVisualization = () => {
 
         // Calculate spherical harmonic value
         const value = calculateYlm(l, m, theta, phi);
+
+        // Scale the position by the absolute value of the spherical harmonic
+        const scale = 0.3 + Math.abs(value) * 0.7; // Adjusted scaling for better visualization
+        positions[i] = x * scale;
+        positions[i + 1] = y * scale;
+        positions[i + 2] = z * scale;
+
         colors.push(valueToColor(value));
       }
 
+      geometry.attributes.position.needsUpdate = true;
       geometry.setAttribute(
         "color",
         new THREE.Float32BufferAttribute(
@@ -176,10 +184,24 @@ export const SphericalHarmonicsVisualization = () => {
     };
 
     // Add lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7); // Increased ambient light
     scene.add(ambientLight);
 
-    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 1.5);
+    // Add multiple directional lights for uniform lighting
+    const directionalLight1 = new THREE.DirectionalLight(0xffffff, 0.7);
+    directionalLight1.position.set(1, 2, 3);
+    scene.add(directionalLight1);
+
+    const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.7);
+    directionalLight2.position.set(-1, -2, -3);
+    scene.add(directionalLight2);
+
+    const directionalLight3 = new THREE.DirectionalLight(0xffffff, 0.8);
+    directionalLight3.position.set(3, -2, 1);
+    scene.add(directionalLight3);
+
+    // Add a hemisphere light for subtle color variation
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.6);
     hemiLight.position.set(0, 1, 0);
     scene.add(hemiLight);
 
@@ -234,8 +256,8 @@ export const SphericalHarmonicsVisualization = () => {
 
   return (
     <div className="w-full flex flex-col items-center">
-      <div className="mb-8 flex gap-12 items-center">
-        <div className="flex flex-col items-center">
+      <div className="mb-8 flex flex-col sm:flex-row gap-6 sm:gap-12 items-center">
+        <div className="flex flex-col items-center w-full sm:w-auto px-4 sm:px-0">
           <label className="text-lg font-medium mb-2">
             <InlineMath math={`\\ell = ${draftL}`} />
           </label>
@@ -255,10 +277,10 @@ export const SphericalHarmonicsVisualization = () => {
                 debouncedUpdate(newL, draftM);
               }
             }}
-            className="w-48 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+            className="w-full sm:w-48 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
           />
         </div>
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center w-full sm:w-auto px-4 sm:px-0">
           <label className="text-lg font-medium mb-2">
             <InlineMath math={`m = ${draftM}`} />
           </label>
@@ -272,7 +294,7 @@ export const SphericalHarmonicsVisualization = () => {
               setDraftM(newM);
               debouncedUpdate(draftL, newM);
             }}
-            className="w-48 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+            className="w-full sm:w-48 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
           />
         </div>
       </div>
