@@ -1,4 +1,4 @@
-# Raffi's Personal Website
+# rhotter.com
 
 ## Getting Started
 
