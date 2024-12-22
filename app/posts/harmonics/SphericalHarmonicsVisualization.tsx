@@ -338,7 +338,7 @@ export const SphericalHarmonicsVisualization = () => {
             className="w-full sm:w-48 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
           />
         </div>
-        <div className="flex flex-col items-center w-full sm:w-auto px-4 sm:px-0">
+        <div className="hidden sm:flex flex-col items-center w-auto">
           <label className="text-lg font-medium mb-2">Mode</label>
           <select
             value={mode}
@@ -352,6 +352,20 @@ export const SphericalHarmonicsVisualization = () => {
         </div>
       </div>
       <div ref={containerRef} style={{ width: "100%", height: "auto" }} />
+      <div className="block sm:hidden mt-8 mb-12">
+        <div className="flex flex-row items-center gap-4 justify-center">
+          <label className="text-lg font-medium">Mode</label>
+          <select
+            value={mode}
+            onChange={(e) => setMode(e.target.value as VisualizationMode)}
+            className="px-3 py-1 border border-gray-300 rounded-md bg-white"
+          >
+            <option value="real">Real</option>
+            <option value="imaginary">Imaginary</option>
+            <option value="complex">Complex</option>
+          </select>
+        </div>
+      </div>
     </div>
   );
 };
