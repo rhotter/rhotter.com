@@ -9,7 +9,7 @@ export function Bottom() {
 
   return (
     <div className="mt-4 flex flex-col items-center">
-      <div className="flex gap-4 text-sm text-gray-600">
+      <div className="flex flex-wrap gap-4 text-sm text-gray-600 justify-center text-center">
         <Link
           href="https://github.com/rhotter/rhotter2/blob/main/app/posts/harmonics/SphericalHarmonicsVisualization.tsx"
           target="_blank"
@@ -18,7 +18,7 @@ export function Bottom() {
         >
           View source code
         </Link>{" "}
-        |
+        <span className="hidden sm:inline">|</span>{" "}
         <a
           onClick={() => setShowContent(!showContent)}
           className="text-gray-600 hover:text-gray-900 underline cursor-pointer"
