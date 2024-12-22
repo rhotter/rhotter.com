@@ -249,11 +249,10 @@ export const SphericalHarmonicsVisualization = () => {
         let scale: number;
 
         if (mode === "complex") {
-          scale =
-            0.05 + Math.sqrt(ylm.real * ylm.real + ylm.imag * ylm.imag) * 0.95;
+          scale = Math.sqrt(ylm.real * ylm.real + ylm.imag * ylm.imag);
         } else {
           const value = mode === "real" ? ylm.real : ylm.imag;
-          scale = 0.05 + Math.abs(value) * 0.95;
+          scale = Math.abs(value);
         }
 
         positions[i] = x * scale;
