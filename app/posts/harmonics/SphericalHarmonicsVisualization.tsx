@@ -107,8 +107,8 @@ export const SphericalHarmonicsVisualization = () => {
       const phase = Math.atan2(imag, real);
       const magnitude = Math.sqrt(real * real + imag * imag);
       const hue = ((phase / Math.PI) * 180 + 180) % 360; // Map [-π, π] to [0, 360]
-      const lightness = 0.5 + 0.3 * Math.min(magnitude, 1); // Adjust lightness based on magnitude
-      return new THREE.Color().setHSL(hue / 360, 0.8, lightness);
+      const lightness = 0.4 + 0.35 * Math.min(magnitude, 1); // Adjusted lightness range for more vibrancy
+      return new THREE.Color().setHSL(hue / 360, 0.9, lightness); // Increased saturation to 0.9
     } else {
       // Original color scheme for real/imaginary parts
       const val =
@@ -117,7 +117,7 @@ export const SphericalHarmonicsVisualization = () => {
           : mode === "real"
           ? value.real
           : value.imag;
-      return val >= 0 ? new THREE.Color(0x5b84b1) : new THREE.Color(0xfc766a);
+      return val >= 0 ? new THREE.Color(0x5c9fff) : new THREE.Color(0xff6b8b);
     }
   };
 
