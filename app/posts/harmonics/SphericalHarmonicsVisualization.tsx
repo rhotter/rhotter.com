@@ -6,11 +6,14 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import "katex/dist/katex.min.css";
 import { InlineMath } from "react-katex";
 
+type VisualizationMode = "real" | "imaginary" | "complex";
+
 export const SphericalHarmonicsVisualization = () => {
   const [l, setL] = useState(4);
   const [m, setM] = useState(2);
   const [draftL, setDraftL] = useState(4);
   const [draftM, setDraftM] = useState(2);
+  const [mode, setMode] = useState<VisualizationMode>("complex");
   const updateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
@@ -67,7 +70,6 @@ export const SphericalHarmonicsVisualization = () => {
   // Calculate spherical harmonic Y(l,m)
   const calculateYlm = (l: number, m: number, theta: number, phi: number) => {
     const cosTheta = Math.cos(theta);
-    // Normalization including m dependence
     const norm = Math.sqrt(
       ((2 * l + 1) * factorial(l - Math.abs(m))) /
         (4 * Math.PI * factorial(l + Math.abs(m)))
@@ -75,14 +77,17 @@ export const SphericalHarmonicsVisualization = () => {
 
     const legendre = calculateLegendreP(l, Math.abs(m), cosTheta);
 
-    // e^(imφ) = cos(mφ) + i*sin(mφ)
+    // Calculate both real and imaginary parts
     const real = Math.cos(m * phi);
+    const imag = Math.sin(m * phi);
 
     // For m < 0, multiply by (-1)^m
     const mSign = m < 0 ? (Math.abs(m) % 2 === 0 ? 1 : -1) : 1;
 
-    // Return real part for visualization
-    return norm * legendre * real * mSign;
+    return {
+      real: norm * legendre * real * mSign,
+      imag: norm * legendre * imag * mSign,
+    };
   };
 
   // Helper function to calculate factorial
@@ -92,11 +97,27 @@ export const SphericalHarmonicsVisualization = () => {
   };
 
   // Convert function value to color using a modern, vibrant color scheme
-  const valueToColor = (value: number) => {
-    if (value >= 0) {
-      return new THREE.Color(0x5b84b1); // Soft slate blue
+  const valueToColor = (
+    value: number | { real: number; imag: number },
+    mode: VisualizationMode
+  ) => {
+    if (mode === "complex") {
+      // For complex mode, use HSL color space where hue represents phase
+      const { real, imag } = value as { real: number; imag: number };
+      const phase = Math.atan2(imag, real);
+      const magnitude = Math.sqrt(real * real + imag * imag);
+      const hue = ((phase / Math.PI) * 180 + 180) % 360; // Map [-π, π] to [0, 360]
+      const lightness = 0.5 + 0.3 * Math.min(magnitude, 1); // Adjust lightness based on magnitude
+      return new THREE.Color().setHSL(hue / 360, 0.8, lightness);
     } else {
-      return new THREE.Color(0xfc766a); // Soft coral
+      // Original color scheme for real/imaginary parts
+      const val =
+        typeof value === "number"
+          ? value
+          : mode === "real"
+          ? value.real
+          : value.imag;
+      return val >= 0 ? new THREE.Color(0x5b84b1) : new THREE.Color(0xfc766a);
     }
   };
 
@@ -221,14 +242,22 @@ export const SphericalHarmonicsVisualization = () => {
         const theta = Math.acos(z / r);
         const phi = Math.atan2(y, x);
 
-        const value = calculateYlm(l, m, theta, phi);
-        const scale = 0.3 + Math.abs(value) * 0.7;
+        const ylm = calculateYlm(l, m, theta, phi);
+        let scale: number;
+
+        if (mode === "complex") {
+          scale =
+            0.05 + Math.sqrt(ylm.real * ylm.real + ylm.imag * ylm.imag) * 0.95;
+        } else {
+          const value = mode === "real" ? ylm.real : ylm.imag;
+          scale = 0.05 + Math.abs(value) * 0.95;
+        }
 
         positions[i] = x * scale;
         positions[i + 1] = y * scale;
         positions[i + 2] = z * scale;
 
-        colors.push(valueToColor(value));
+        colors.push(valueToColor(ylm, mode));
       }
 
       geometry.attributes.position.needsUpdate = true;
@@ -252,7 +281,7 @@ export const SphericalHarmonicsVisualization = () => {
     };
 
     updateSphere();
-  }, [l, m]);
+  }, [l, m, mode]);
 
   const handleLChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -306,6 +335,18 @@ export const SphericalHarmonicsVisualization = () => {
             onChange={handleMChange}
             className="w-full sm:w-48 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
           />
+        </div>
+        <div className="flex flex-col items-center w-full sm:w-auto px-4 sm:px-0">
+          <label className="text-lg font-medium mb-2">Mode</label>
+          <select
+            value={mode}
+            onChange={(e) => setMode(e.target.value as VisualizationMode)}
+            className="px-3 py-1 border border-gray-300 rounded-md bg-white"
+          >
+            <option value="real">Real</option>
+            <option value="imaginary">Imaginary</option>
+            <option value="complex">Complex</option>
+          </select>
         </div>
       </div>
       <div ref={containerRef} style={{ width: "100%", height: "auto" }} />
