@@ -13,7 +13,7 @@ export const SphericalHarmonicsVisualization = () => {
   const [m, setM] = useState(2);
   const [draftL, setDraftL] = useState(4);
   const [draftM, setDraftM] = useState(2);
-  const [mode, setMode] = useState<VisualizationMode>("complex");
+  const [mode, setMode] = useState<VisualizationMode>("real");
   const updateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
