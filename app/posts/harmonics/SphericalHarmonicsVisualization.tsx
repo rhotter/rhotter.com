@@ -18,6 +18,7 @@ export const SphericalHarmonicsVisualization = () => {
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const sphereRef = useRef<THREE.Mesh | null>(null);
   const controlsRef = useRef<OrbitControls | null>(null);
+  const isInitializedRef = useRef(false);
 
   // Debounced update function
   const debouncedUpdate = useCallback((newL: number, newM: number) => {
@@ -99,13 +100,15 @@ export const SphericalHarmonicsVisualization = () => {
     }
   };
 
+  // Initialize Three.js scene
   useEffect(() => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || isInitializedRef.current) return;
+    isInitializedRef.current = true;
 
     // Setup scene
     const scene = new THREE.Scene();
     sceneRef.current = scene;
-    scene.background = new THREE.Color(0xffffff); // White background
+    scene.background = new THREE.Color(0xffffff);
 
     // Setup camera
     const containerWidth = containerRef.current.clientWidth;
@@ -125,8 +128,79 @@ export const SphericalHarmonicsVisualization = () => {
     renderer.setSize(containerWidth, containerHeight);
     containerRef.current.appendChild(renderer.domElement);
 
+    // Add lights
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+    scene.add(ambientLight);
+
+    const directionalLight1 = new THREE.DirectionalLight(0xffffff, 0.7);
+    directionalLight1.position.set(1, 2, 3);
+    scene.add(directionalLight1);
+
+    const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.7);
+    directionalLight2.position.set(-1, -2, -3);
+    scene.add(directionalLight2);
+
+    const directionalLight3 = new THREE.DirectionalLight(0xffffff, 0.8);
+    directionalLight3.position.set(3, -2, 1);
+    scene.add(directionalLight3);
+
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.6);
+    hemiLight.position.set(0, 1, 0);
+    scene.add(hemiLight);
+
+    // Setup controls
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controlsRef.current = controls;
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 15.0;
+    controls.enableZoom = false;
+    controls.enablePan = false;
+    controls.minDistance = 1.7;
+    controls.maxDistance = 1.7;
+
+    // Animation loop
+    const animate = () => {
+      requestAnimationFrame(animate);
+      if (controlsRef.current) {
+        controlsRef.current.update();
+      }
+      if (rendererRef.current && sceneRef.current && cameraRef.current) {
+        rendererRef.current.render(sceneRef.current, cameraRef.current);
+      }
+    };
+    animate();
+
+    // Handle window resize
+    const handleResize = () => {
+      if (!cameraRef.current || !rendererRef.current || !containerRef.current)
+        return;
+      const width = containerRef.current.clientWidth;
+      const height = Math.min(width, window.innerHeight * 0.8);
+      cameraRef.current.aspect = width / height;
+      cameraRef.current.updateProjectionMatrix();
+      rendererRef.current.setSize(width, height);
+    };
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      if (containerRef.current && renderer.domElement) {
+        containerRef.current.removeChild(renderer.domElement);
+      }
+      if (controlsRef.current) {
+        controlsRef.current.dispose();
+      }
+    };
+  }, []); // Only run once on mount
+
+  // Update sphere when l or m changes
+  useEffect(() => {
+    if (!sceneRef.current) return;
+
     const updateSphere = () => {
-      // Create sphere geometry
       const geometry = new THREE.SphereGeometry(1, 512, 512);
       const material = new THREE.MeshStandardMaterial({
         vertexColors: true,
@@ -134,26 +208,22 @@ export const SphericalHarmonicsVisualization = () => {
         metalness: 0.1,
       });
 
-      // Apply spherical harmonics colors and deform geometry
       const colors: THREE.Color[] = [];
       const positions = geometry.attributes.position.array;
-      const originalPositions = positions.slice(); // Store original positions
+      const originalPositions = positions.slice();
 
       for (let i = 0; i < positions.length; i += 3) {
         const x = originalPositions[i];
         const y = originalPositions[i + 1];
         const z = originalPositions[i + 2];
 
-        // Convert to spherical coordinates
         const r = Math.sqrt(x * x + y * y + z * z);
         const theta = Math.acos(z / r);
         const phi = Math.atan2(y, x);
 
-        // Calculate spherical harmonic value
         const value = calculateYlm(l, m, theta, phi);
+        const scale = 0.3 + Math.abs(value) * 0.7;
 
-        // Scale the position by the absolute value of the spherical harmonic
-        const scale = 0.3 + Math.abs(value) * 0.7; // Adjusted scaling for better visualization
         positions[i] = x * scale;
         positions[i + 1] = y * scale;
         positions[i + 2] = z * scale;
@@ -170,89 +240,43 @@ export const SphericalHarmonicsVisualization = () => {
         )
       );
 
-      // Remove old sphere if it exists
       if (sphereRef.current) {
-        scene.remove(sphereRef.current);
+        sceneRef.current?.remove(sphereRef.current);
         sphereRef.current.geometry.dispose();
         (sphereRef.current.material as THREE.Material).dispose();
       }
 
-      // Create new sphere mesh
       const sphere = new THREE.Mesh(geometry, material);
       sphereRef.current = sphere;
-      scene.add(sphere);
+      sceneRef.current?.add(sphere);
     };
-
-    // Add lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7); // Increased ambient light
-    scene.add(ambientLight);
-
-    // Add multiple directional lights for uniform lighting
-    const directionalLight1 = new THREE.DirectionalLight(0xffffff, 0.7);
-    directionalLight1.position.set(1, 2, 3);
-    scene.add(directionalLight1);
-
-    const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.7);
-    directionalLight2.position.set(-1, -2, -3);
-    scene.add(directionalLight2);
-
-    const directionalLight3 = new THREE.DirectionalLight(0xffffff, 0.8);
-    directionalLight3.position.set(3, -2, 1);
-    scene.add(directionalLight3);
-
-    // Add a hemisphere light for subtle color variation
-    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.6);
-    hemiLight.position.set(0, 1, 0);
-    scene.add(hemiLight);
 
     updateSphere();
+  }, [l, m]);
 
-    // Setup controls
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controlsRef.current = controls;
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
-    controls.autoRotate = true;
-    controls.autoRotateSpeed = 15.0;
-
-    // Disable zooming and panning
-    controls.enableZoom = false;
-    controls.enablePan = false;
-    controls.minDistance = 1.7;
-    controls.maxDistance = 1.7;
-
-    // Animation loop
-    const animate = () => {
-      requestAnimationFrame(animate);
-      controls.update();
-      renderer.render(scene, camera);
-    };
-    animate();
-
-    // Handle window resize
-    const handleResize = () => {
-      if (!camera || !renderer || !containerRef.current) return;
-      const width = containerRef.current.clientWidth;
-      const height = Math.min(width, window.innerHeight * 0.8);
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(width, height);
-    };
-    window.addEventListener("resize", handleResize);
-
-    // Cleanup
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      if (containerRef.current && renderer.domElement) {
-        containerRef.current.removeChild(renderer.domElement);
+  const handleLChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newL = parseInt(e.target.value);
+      setDraftL(newL);
+      if (Math.abs(draftM) > newL) {
+        const newM = 0;
+        setDraftM(newM);
+        debouncedUpdate(newL, newM);
+      } else {
+        debouncedUpdate(newL, draftM);
       }
-      if (sphereRef.current) {
-        sphereRef.current.geometry.dispose();
-        (sphereRef.current.material as THREE.Material).dispose();
-      }
-      controls.dispose();
-    };
-  }, [l, m]); // Re-run effect when l or m changes
+    },
+    [draftM, debouncedUpdate]
+  );
+
+  const handleMChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newM = parseInt(e.target.value);
+      setDraftM(newM);
+      debouncedUpdate(draftL, newM);
+    },
+    [draftL, debouncedUpdate]
+  );
 
   return (
     <div className="w-full flex flex-col items-center">
@@ -266,17 +290,7 @@ export const SphericalHarmonicsVisualization = () => {
             min="0"
             max="20"
             value={draftL}
-            onChange={(e) => {
-              const newL = parseInt(e.target.value);
-              setDraftL(newL);
-              if (Math.abs(draftM) > newL) {
-                const newM = 0;
-                setDraftM(newM);
-                debouncedUpdate(newL, newM);
-              } else {
-                debouncedUpdate(newL, draftM);
-              }
-            }}
+            onChange={handleLChange}
             className="w-full sm:w-48 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
           />
         </div>
@@ -289,11 +303,7 @@ export const SphericalHarmonicsVisualization = () => {
             min={-draftL}
             max={draftL}
             value={draftM}
-            onChange={(e) => {
-              const newM = parseInt(e.target.value);
-              setDraftM(newM);
-              debouncedUpdate(draftL, newM);
-            }}
+            onChange={handleMChange}
             className="w-full sm:w-48 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
           />
         </div>
