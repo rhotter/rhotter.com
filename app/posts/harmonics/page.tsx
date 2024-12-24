@@ -6,6 +6,8 @@ import { Bottom } from "./Bottom";
 export const metadata = {
   title: "Spherical Harmonics",
   date: "2024-12-19",
+  description:
+    "3D visualization tool for exploring spherical harmonics (Ylm) functions. Visualize and compare real, imaginary, and complex components by adjusting the degree (l) and order (m) parameters. Commonly used in quantum mechanics, electromagnetic theory, and 3D graphics.",
 };
 
 export default function Page() {
