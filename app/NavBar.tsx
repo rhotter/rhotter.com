@@ -9,6 +9,7 @@ import { faTwitter } from "@fortawesome/free-brands-svg-icons";
 import {
   faChevronCircleUp,
   faEnvelope,
+  faGraduationCap,
 } from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
@@ -68,6 +69,10 @@ export const Socials = () => (
     <SocialIcon href="https://twitter.com/raffi_hotter" icon={faTwitter} />
     <SocialIcon href="mailto:raphael.hotter@gmail.com" icon={faEnvelope} />
     <SocialIcon href="https://github.com/rhotter" icon={faGithub} />
+    <SocialIcon
+      href="https://scholar.google.com/citations?user=h8ZS-0sAAAAJ&hl=en"
+      icon={faGraduationCap}
+    />
     <SocialIcon
       href="https://curius.app/raffi-hotter"
       icon={faChevronCircleUp}
