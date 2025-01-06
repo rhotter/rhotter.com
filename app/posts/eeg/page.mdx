@@ -1,0 +1,41 @@
+export const metadata = {
+  title: "Why is EEG bad?",
+  date: "2025-01-05",
+  hidden: true
+};
+
+import { PostHeader } from "@/app/components/PostHeader";
+import { SphericalHarmonicsVisualization } from "../harmonics/SphericalHarmonicsVisualization";
+
+<PostHeader title={metadata.title} date={metadata.date} draft />
+
+import eegBefore from "@/app/public/eeg/eeg_before.png";
+import eegAfter from "@/app/public/eeg/eeg_after.png";
+import Image from "next/image";
+
+This blog post has no words yet, but I've spent something like 30 hours on animations+simulations for it. So here are some I've made!
+
+### 1. What is EEG showing?
+
+This is a biophysically realistic model of how neural activity appears on EEG.
+<div className="flex flex-col md:flex-row gap-4 w-3/4 mx-auto items-start">
+  <div className="flex-1 flex flex-col">
+    <div className="flex-grow">
+      <Image src={eegBefore} alt="EEG before" className="w-full" />
+    </div>
+    <p className="text-center text-sm mt-2">Neural activity in the brain</p>
+  </div>
+  <div className="flex-1 flex flex-col">
+    <div className="flex-grow">
+      <Image src={eegAfter} alt="EEG after" className="w-full" />
+    </div>
+    <p className="text-center text-sm mt-2">Activity measured by EEG electrodes</p>
+  </div>
+</div>
+
+### 2. Visualization of spherical harmonics
+Why does EEG blur the signal? I'm working on an explanation that involves spherical harmonics. Here's a visualization of what those are:
+<div className="h-10" />
+
+<SphericalHarmonicsVisualization />
+You can drag the harmonics around!
