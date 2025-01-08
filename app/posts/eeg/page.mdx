@@ -1,41 +1,40 @@
 export const metadata = {
-  title: "Why is EEG bad?",
+  title: "Why is EEG Bad? A Biophysical Perspective",
   date: "2025-01-05",
-  hidden: true
+  hidden: true,
 };
 
 import { PostHeader } from "@/app/components/PostHeader";
 import { SphericalHarmonicsVisualization } from "../harmonics/SphericalHarmonicsVisualization";
-
-<PostHeader title={metadata.title} date={metadata.date} draft />
+import { EEGBlurPlot, EEGBrainPlot } from "./EEGBlurPlot";
 
 import eegBefore from "@/app/public/eeg/eeg_before.png";
 import eegAfter from "@/app/public/eeg/eeg_after.png";
+import eegHeadset from "@/app/public/eeg/eeg_headset.jpg";
+import multimeterImg from "@/app/public/eeg/multimeter.jpg";
+import threeLayerImg from "@/app/public/eeg/3_layers.png";
+
+
 import Image from "next/image";
+import CenteredImg from "./CenteredImg"
 
-This blog post has no words yet, but I've spent something like 30 hours on animations+simulations for it. So here are some of the visuals I've made for it!
+<PostHeader title={metadata.title} date={metadata.date} draft />
 
-### 1. What is EEG showing?
+If you've ever used EEG, you've probably had a lot of trouble extracting useful signal from it. Neurotech hackers love to use it to make cool demos (for example, I was part of a team at McGill that made a [brain-controlled wheelchair](https://youtu.be/_46AoSnHCRo?si=NU3U6fbNqZbvme5Q)).
 
-This is a biophysically realistic simulation of how neural activity appears on EEG.
-<div className="flex flex-col md:flex-row gap-4 w-3/4 mx-auto items-start">
-  <div className="flex-1 flex flex-col">
-    <div className="flex-grow">
-      <Image src={eegBefore} alt="EEG before" className="w-full" />
-    </div>
-    <p className="text-center text-sm mt-2">Neural activity in the brain</p>
-  </div>
-  <div className="flex-1 flex flex-col">
-    <div className="flex-grow">
-      <Image src={eegAfter} alt="EEG after" className="w-full" />
-    </div>
-    <p className="text-center text-sm mt-2">Activity measured by EEG electrodes</p>
-  </div>
-</div>
+But the performance of EEG never seems that great and these demos never amount to anything.
 
-### 2. Visualization of spherical harmonics
-Why does EEG blur the signal? I'm working on an explanation that involves spherical harmonics. Here's a visualization of what those are:
-<div className="h-10" />
+Why? Many people claim that EEG has "bad spatial resolution." Indeed, that would contribute to the signal quality being bad. But how bad is bad? What if you drastically increase the number of sensors?
 
-<SphericalHarmonicsVisualization />
-You can drag the harmonics around!
+In this post, we'll quantify from first principles the resolution of EEG.
+
+### What even is EEG?
+EEG stands for electroencephalography. It's essentially a bunch of [multimeters](https://en.wikipedia.org/wiki/Multimeter) on the head. Each sensor measures the voltage between points on the head and a reference point (typically the ear).
+
+<CenteredImg src={eegHeadset} alt="eeg headset" />
+
+To make our life simple, we'll use the [spherical cow](https://en.wikipedia.org/wiki/Spherical_cow) model for neuroscience. We'll treat the head as a sphere that consists of a few layers: the brain, the skull, and the scalp. 
+
+<CenteredImg src={threeLayerImg} alt="3 layers of head" className="h-64" />
+
+We can then view EEG as a sampling of the voltage of the outermost sphere, the scalp.
