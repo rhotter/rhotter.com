@@ -13,7 +13,7 @@ const Page = async () => {
 
   const twitterThreads = [
     {
-      date: "2024-01-05",
+      date: "2025-01-05",
       title: "Why are MRIs so damn heavy?",
       url: "https://x.com/raffi_hotter/status/1876127020855529920",
     },
