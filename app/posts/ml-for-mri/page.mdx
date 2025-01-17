@@ -19,6 +19,8 @@ import { PostHeader } from "@/app/components/PostHeader";
 import { Hide } from "./Hide";
 import { Youtube } from "./Youtube";
 import Image from "next/image";
+import Link from "next/link";
+
 
 <PostHeader title={metadata.title} date={metadata.date} />
 
@@ -251,16 +253,9 @@ Below is a sample reconstruction from their study, compared with the ground trut
 <figure className="w-3/4 mx-auto">
 <Image src={varnetResults} alt="VarNet results" />
 <figcaption>
-  <b>
-        Knee MRI comparison between VarNet and the ground truth at 4x
-        acceleration.
-      </b>{" "}
-      Figure reproduced from{" "}
-      <a href="https://www.ajronline.org/doi/10.2214/AJR.20.23313">
-        Recht et al. 2020
-      </a>
-      .
-    </figcaption>
+  <b>Knee MRI comparison between VarNet and the ground truth at 4x acceleration.</b>
+  Figure reproduced from <a href="https://www.ajronline.org/doi/10.2214/AJR.20.23313">Recht et al. 2020</a>.
+</figcaption>
 </figure>
 
 So how does VarNet work? It starts with a blank image, and consists of a series of refinement steps, progressively turning the blank image into a better and better version.
@@ -366,11 +361,13 @@ It turns out such untrained models have been applied to other inverse problems l
 <figure className="w-1/2 mx-auto">
 <Image src={convdecoderResults} alt="ConvDecoder results" />
 <figcaption>
-        Comparison of the untrained{" "}
-        <a href="http://arxiv.org/abs/2007.02471">ConvDecoder</a> with the{" "}
-        <a href="http://arxiv.org/abs/1811.08839">U-Net MRI</a>, and
-        total-variation regularized compressed sensing.** Reconstructions of
-        knee-MRI at 4x acceleration. The second row is a zoomed in version of the
+        <div className="font-bold">
+        Comparison of the untrained <Link href="http://arxiv.org/abs/2007.02471">ConvDecoder</Link> with {" "}
+        <Link href="http://arxiv.org/abs/1811.08839">U-Net MRI</Link>, and
+        total-variation regularized compressed sensing.
+        </div>
+        
+        These are reconstructions of knee-MRI at 4x acceleration. The second row is a zoomed in version of the
       first row. Figure reproduced from{" "}
       <a href="http://arxiv.org/abs/2007.02471">Darestani et al. 2020</a>.
       </figcaption>
