@@ -1,6 +1,6 @@
 export const metadata = {
-  title: "Why is EEG Bad? A Biophysical Perspective",
-  date: "2025-01-05",
+  title: "What is the resolution of EEG?",
+  date: "2025-02-08",
   hidden: true,
 };
 
@@ -19,18 +19,20 @@ import CenteredImg from "./CenteredImg"
 
 <PostHeader title={metadata.title} date={metadata.date} draft />
 
-If you've ever used EEG, you've probably had a lot of trouble extracting useful signal from it. Neurotech hackers love to use it to make cool demos (for example, I was part of a team at McGill that made a [brain-controlled wheelchair](https://youtu.be/_46AoSnHCRo?si=NU3U6fbNqZbvme5Q)).
+If you've ever used EEG, you've probably had trouble extracting useful signal from it. Neurotech hackers love to use it to make [cool](https://x.com/perrikaryal/status/1817597037203816541) [demos](https://youtu.be/_46AoSnHCRo?si=NU3U6fbNqZbvme5Q). But the performance of EEG is never that great and these demos never amount to anything.
 
-But the performance of EEG never seems that great and these demos never amount to anything.
+The problem with EEG is that it has poor spatial resolution, i.e., you can't precisely determine where the neural activity is coming from. Or at least that's what people say.
 
-Why? Many people claim that EEG has "bad spatial resolution." Indeed, that would contribute to the signal quality being bad. But how bad is bad? What if you drastically increase the number of sensors?
-
-In this post, we'll quantify from first principles the resolution of EEG.
+I wanted to know if EEG actually has poor spatial resolution. Maybe increasing the number of sensors could give it higher resolution? In this post, we'll quantify from first principles the resolution of EEG.
 
 ### What even is EEG?
-EEG stands for electroencephalography. It's essentially a bunch of [multimeters](https://en.wikipedia.org/wiki/Multimeter) on the head. Each sensor measures the voltage between points on the head and a reference point (typically the ear).
+EEG stands for electroencephalography (I know, that's a mouthful). It's essentially a bunch of [multimeters](https://en.wikipedia.org/wiki/Multimeter) on the head. Each sensor measures the voltage between a point on the head and a reference point (typically the ear).
 
 <CenteredImg src={eegHeadset} alt="eeg headset" />
+
+How does measuring voltage on the head tell us about brain activity?
+
+Well, neurons have 
 
 To make our life simple, we'll use the [spherical cow](https://en.wikipedia.org/wiki/Spherical_cow) model for neuroscience. We'll treat the head as a sphere that consists of a few layers: the brain, the skull, and the scalp. 
 
