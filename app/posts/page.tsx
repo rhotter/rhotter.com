@@ -18,7 +18,7 @@ const Page = async () => {
       url: "https://x.com/raffi_hotter/status/1876127020855529920",
     },
     {
-      date: "2023-05-29",
+      date: "2024-05-29",
       title: "The Neuralink compression challenge is mathematically impossible",
       url: "https://x.com/raffi_hotter/status/1795910298936705098",
     },
