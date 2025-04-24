@@ -30,13 +30,28 @@ EEG stands for electroencephalography -- I know, that's a mouthful. Let me expla
 
 <CenteredImg src={eegHeadset} alt="eeg headset" />
 
-When neurons fire, electric charges move around, which changes the surrounding electric field. EEG probes that electric field, by measuring the voltage at many points on the head. The hardware is actually really simple -- it's the same hardware as a [multimeter](https://en.wikipedia.org/wiki/Multimeter) which is used for measuring voltage in an electrical circuit. The measurement is taken with an _electrode_, but really, in this context, that's just a fancy word for a wire.
+When neurons fire, electric charges move around, which changes the surrounding electric field. EEG probes that electric field, by measuring the voltage at many points on the head. The hardware is actually pretty simple -- it's the same hardware as a [multimeter](https://en.wikipedia.org/wiki/Multimeter) which is used for measuring voltage in an electrical circuit. The measurement is taken with an _electrode_, but really, in this context, that's just a fancy word for a wire.
+
+I was curious about what the electric field of a neuron firing looks like? Intuitively, if the electric field changes a lot from electrode to electrode, then EEG might have high spatial resolution. But if the electric field doesn't change much over large distances, then EEG should have low resolution.
+
+So I simulated it. Here's the voltage distribution on the head of a small group of neurons ([code is here](https://github.com/rhotter/eeg-sim)). You can move it around.
+
+<iframe src="/scene-export.html" width="100%" height="400"/>
+
+The yellow area is where the signal is largest. But if you notice, the yellow blob is quite large, which isn't a great sign for the resolution of EEG.
+
+### 
+This pictures are nice and good, but is there a quantitative way to estimate the resolution?
+
+
+
+was very well localized to small region, then EEG should have high resolution. But if 
 
 I was curious about which spots of the brain the electrode is sensitive to. Intuitively, if the electrode was sensitive to only a very small region, then EEG should have high resolution. But if it's sensitive to a large area, its resolution will be lower. This is actually a subtle point, and we'll get back to it later.
 
 So I simulated the 
 
-I was curious about what the electric field of a neuron firing looks like? So I simulated it. I put a group of neurons inside the head (in the cortex), and simulated the voltage distribution on the scalp.
+ So I simulated it. I put a group of neurons inside the head (in the cortex), and simulated the voltage distribution on the scalp.
 
 <video autoPlay muted loop className="w-full max-w-sm mx-auto my-8">
   <source src="/eeg/eeg1.mp4" type="video/mp4" />
