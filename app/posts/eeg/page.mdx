@@ -13,26 +13,36 @@ import eegHeadset from "@/app/public/eeg/eeg_headset.jpg";
 import multimeterImg from "@/app/public/eeg/multimeter.jpg";
 import threeLayerImg from "@/app/public/eeg/3_layers.png";
 
-
 import Image from "next/image";
 import CenteredImg from "./CenteredImg"
+import Hide from "@/app/components/Hide"
 
 <PostHeader title={metadata.title} date={metadata.date} draft />
 
 If you've ever used EEG, you've probably had trouble extracting useful signal from it. Neurotech hackers love to use it to make [cool](https://x.com/perrikaryal/status/1817597037203816541) [demos](https://youtu.be/_46AoSnHCRo?si=NU3U6fbNqZbvme5Q). But the performance of EEG is never that great and these demos never amount to anything.
 
-The problem with EEG is that it has poor spatial resolution, i.e., you can't precisely determine where the neural activity is coming from. Or at least that's what people say.
+Why is that? A big problem with EEG is that it has poor spatial resolution, i.e., you can't precisely determine where the neural activity is coming from. Or at least that's what people say.
 
-I wanted to know if EEG actually has poor spatial resolution. Maybe increasing the number of sensors could give it higher resolution? In this post, we'll quantify from first principles the resolution of EEG.
+I wanted to know if EEG _actually_ has poor spatial resolution. Maybe increasing the number of sensors could give it higher resolution, for example? In this post, we'll quantify from first principles the resolution of EEG.
 
 ### What even is EEG?
-EEG stands for electroencephalography (I know, that's a mouthful). It's essentially a bunch of [multimeters](https://en.wikipedia.org/wiki/Multimeter) on the head. Each sensor measures the voltage between a point on the head and a reference point (typically the ear).
+EEG stands for electroencephalography -- I know, that's a mouthful. Let me explain what's going on.
 
 <CenteredImg src={eegHeadset} alt="eeg headset" />
 
-How does measuring voltage on the head tell us about brain activity?
+When neurons fire, electric charges move around, which changes the surrounding electric field. EEG probes that electric field, by measuring the voltage at many points on the head. The hardware is actually really simple -- it's the same hardware as a [multimeter](https://en.wikipedia.org/wiki/Multimeter) which is used for measuring voltage in an electrical circuit. The measurement is taken with an _electrode_, but really, in this context, that's just a fancy word for a wire.
 
-Well, neurons have 
+I was curious about which spots of the brain the electrode is sensitive to. Intuitively, if the electrode was sensitive to only a very small region, then EEG should have high resolution. But if it's sensitive to a large area, its resolution will be lower. This is actually a subtle point, and we'll get back to it later.
+
+So I simulated the 
+
+I was curious about what the electric field of a neuron firing looks like? So I simulated it. I put a group of neurons inside the head (in the cortex), and simulated the voltage distribution on the scalp.
+
+<video autoPlay muted loop className="w-full max-w-sm mx-auto my-8">
+  <source src="/eeg/eeg1.mp4" type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
+
 
 To make our life simple, we'll use the [spherical cow](https://en.wikipedia.org/wiki/Spherical_cow) model for neuroscience. We'll treat the head as a sphere that consists of a few layers: the brain, the skull, and the scalp. 
 
