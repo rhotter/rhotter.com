@@ -15,8 +15,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={GeistSans.className}>
+    <html lang="en" className="bg-white">
+      <body className={`${GeistSans.className} bg-white`}>
         <div className="container mx-auto px-6 sm:pt-16 pt-6 text-gray-900 max-w-2xl pb-16">
           <NavBar />
           <div className="prose prose-sm">{children}</div>
