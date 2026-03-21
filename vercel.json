@@ -1,0 +1,15 @@
+{
+  "redirects": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "zoom.rhotter.com"
+        }
+      ],
+      "destination": "https://harvard.zoom.us/j/8391294398",
+      "permanent": false
+    }
+  ]
+}
